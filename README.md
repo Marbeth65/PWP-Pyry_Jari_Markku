@@ -1,5 +1,5 @@
 # PWP SPRING 2020
-# Ten finger typing program
+# Car installment calculator
 # Group information
 * Student 1. Jari Jussila jari.jussila@student.oulu.fi
 * Student 2. Pyry Saarinen saarinenps@gmail.com
