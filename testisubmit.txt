@@ -1,1 +1,0 @@
-Tämän tarkoitus on vain testata, toimiiko submittaus komentoriviltä.
