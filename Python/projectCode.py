@@ -34,7 +34,7 @@ def add_payment():                                # Function to save plan to the
     carPrice = carPrice,
     totalPrice = totalPrice,
     paymentMonths = paymentMonths,
-    montlyPayment = montlyPayment
+    montlyPayment = monthlyPayment
     )
     db.session.add(plan)                     
     db.session.commit()                           # Save information to the database
