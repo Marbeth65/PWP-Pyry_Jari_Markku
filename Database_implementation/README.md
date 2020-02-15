@@ -34,3 +34,6 @@ Example of postable json object:
 	"monthlypayment": 115156.5,
 	"payerpayment": 14112.7
 }
+
+
+PS. Sorry that this file looks like a mess. For some reason this file lost my carefully planned editing. You can try to read this in edit mode to have it in  a more pleasing form.
