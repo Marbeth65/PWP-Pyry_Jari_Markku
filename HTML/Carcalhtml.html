@@ -10,33 +10,43 @@
 		
 		<p>Hand money</p>
 			<input id="handmoney" type="text" placeholder="Hand money"> €
-        <p>Montly fee</p>
-			<input id="monthfee" type="text" placeholder="month fee"> €
+        <p>How many people pay?</p>
+			<input id="peoplenum" type="text" placeholder="how many person"> 
 		
 		<p>Choose paytime
             <p>
               <select id="partofmonth">
             <option disabled selected value="0">-- Choose paytime --</option>
-            <option value="12">12&#37; &#45; 12 month</option>
-            <option value="24">24&#37; &#45; 24 month</option>
-            <option value="36">36&#37; &#45; 36 month</option>
-            <option value="48">48&#37; &#45; 48 month</option>
-            <option value="60">60&#37; &#45; 60 month</option>
-			//Tuota noin, alkuperäisessä koodissa noissa 5 esiintyi prosenttilasku 
-			//esim. option value="0.05">5&#37;
+            <option >12 month</option>
+            <option >24 month</option>
+            <option >36 month</option>
+            <option >48 month</option>
+            <option >60 month</option>
+			//((carprice - handmoney)*1.06)/ ??month = tulos
+			//((carprice - handmoney)*1.06)/ ??person = tulos	Tämä jos auton ostajia on enemmän kuin 1
+			
         </select>
 
     </form>
-    
-    <button type="button" id="calculate">Calculate!</button>
+     </div>
+ 
+ <div id="totalPrice">
+    <sup></sup><span id="monthpay">0.00</span>€ 
+    <small id="pay_of_month"> /month</small>
+ </div>
+     <!--kuukausimaksu-->
+	<button type="button" id="calculate">Calculate!</button>
 
-  </div>
+</div>
+<!--container end-->
+ </div>
   <!--calculator end-->
+ 
   <div id="totalPrice">
-    <sup></sup><span id="tipcar">0.00</span>€
-    <small id="Sold_of_car">Sold of car</small>
+    <sup></sup><span id="fullprice">0.00</span>€ 
+    <small id="Sold_of_car"> full price of car</small>
   </div>
-  <!--totalPrice end-->
+  <!--auton kokonaishinta vuosikoron jälkeen-->
 
 </div>
 <!--container end-->
