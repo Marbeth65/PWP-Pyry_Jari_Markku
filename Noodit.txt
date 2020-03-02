@@ -1,0 +1,6 @@
+Noodit:
+	Paymentplans-all
+	Paymentplans-by-handle
+	Paymentplans-handle-price
+	Paymentplans-manufacturer-all
+	Paymentplans-handle-manufacturer
