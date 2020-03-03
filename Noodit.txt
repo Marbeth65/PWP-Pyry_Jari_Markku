@@ -1,6 +1,6 @@
 Noodit:
-	Paymentplans-all
-	Paymentplans-by-handle
-	Paymentplans-handle-price
-	Paymentplans-manufacturer-all
-	Paymentplans-handle-manufacturer
+	Paymentplans-handle 			# Kaikki yhden handlen suunnitelmat		
+	Paymentplans-handle-manufacturer	# Kaikki handlen suunnitelmat yhdelle tuottajalle.
+	Paymentplans-handle-item		# Yksittäinen suunnitelma
+	Paymentplans-handle-manufacturer-best	# Tuottajan halvimmat autot
+	Paymentplans-handle-manufacturer-model	# Yhden tuottajan kaikki mallit
