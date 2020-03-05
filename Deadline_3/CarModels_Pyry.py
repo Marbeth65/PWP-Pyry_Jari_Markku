@@ -35,6 +35,7 @@ class Paymentplan(db.Model):
     interestrate = db.Column(db.Float)
     months = db.Column(db.Integer, nullable=False)
     payers = db.Column(db.Integer, nullable=False)
+    open = db.Column(db.Boolean, default=True)                                  # Onko maksu maksettu, defaulttina se on "auki".
     
     handle = db.relationship("Handle", back_populates="paymentplans")           # Tämän planin handle
     carmodel = db.relationship("CarModel", back_populates="plans")               # Tämän planin malli
