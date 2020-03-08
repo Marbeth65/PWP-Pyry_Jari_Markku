@@ -32,6 +32,7 @@ class Handle(db.Model):
 class Paymentplan(db.Model):                                                    
     id = db.Column(db.Integer, primary_key=True)
     price = db.Column(db.Float, nullable=False)
+    provider = db.Columnt(db.String(64), nullable=False)
     interestrate = db.Column(db.Float)
     months = db.Column(db.Integer, nullable=False)
     payers = db.Column(db.Integer, nullable=False)
