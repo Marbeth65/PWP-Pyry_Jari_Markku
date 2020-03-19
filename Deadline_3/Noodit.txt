@@ -1,7 +1,6 @@
 Noodit:
-	handle collection
-	handle item
-	paymentplan collection
-	paymentplan item
-	model collection
-	model item
+	Paymentplan Collection "/{handle}/paymentplans"
+	Open Paymentplan Collection "/{handle}/paymentplans/open"
+	Model Collection "/{handle}/models"
+	Model Item "/{handle}/models/{item}"
+	Paymentplan Item "/{handle}/paymentplans/{item}"
