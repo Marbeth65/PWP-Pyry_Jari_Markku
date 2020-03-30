@@ -1,0 +1,7 @@
+Noodit:
+	handle collection
+	handle item
+	paymentplan collection
+	paymentplan item
+	model collection
+	model item
