@@ -1,1 +1,0 @@
-Tänne kuvia, joita tarvitaan kurssilla.
