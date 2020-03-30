@@ -1,0 +1,3 @@
+'''
+tänne utilityfunktiot
+'''
