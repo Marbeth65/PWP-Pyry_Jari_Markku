@@ -17,9 +17,9 @@ class Paymentplan(db.Model):
     months = db.Column(db.Integer, nullable=False)
     payers = db.Column(db.Integer, nullable=False)
     open = db.Column(db.Boolean, default=True)                     
+    owner_name = db.Column(db.String(64), db.ForeignKey("handle.handle"))
     
-    handle = db.relationship("Handle", back_populates="paymentplans")           # Tämän planin handle
-    carmodel = db.relationship("CarModel", back_populates="plans")
+    handle = db.relationship("Handle", back_populates="paymentplans")
     
 import click
 from flask.cli import with_appcontext
@@ -50,9 +50,11 @@ def populate_plans_command(lkm):
     for x in range(lkm):
         item = Paymentplan(
         price = 1000.0,
-        provider = "dummyprovider",
+        provider = "dummyprovider{}".format(x),
         interestrate = 0.0,
         months = 1,
         payers = 1,
         )
+        db.session.add(item)
+        db.session.commit()
         print("Luku on " + str(lkm) + " ja kierros on" + str(x))
