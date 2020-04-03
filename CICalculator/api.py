@@ -6,8 +6,9 @@ api = Api(api_bp)
 
 from CICalculator.resources.PaymentplanCollection import PaymentplanCollection
 
-api.add_resource(PaymentplanCollection, "/api")
+api.add_resource(PaymentplanCollection, "/api/plans")
 
 @api_bp.route("/")
 def index():
     return "toimii"
+    

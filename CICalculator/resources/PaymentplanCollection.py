@@ -1,5 +1,5 @@
 from flask_restful import Resource
-from CICalculator.models import Handle
+from CICalculator.models import Handle, Paymentplan
 
 '''
 Serves as a collection of all paymentplans
@@ -19,14 +19,13 @@ class PaymentplanCollection(Resource):
             plans = x.paymentplans
             planlist = []
             for y in plans:
-                planlist.append({
-                    "price":y.price,
-                    "provider":y.provider,
-                    "interestrate":y.interestrate, 
-                    "months":y.months, 
-                    "payers":y.payers, 
-                    "open":y.open, 
-                    "owner_name":y.owner_name})
+                planlist.append((
+                    y.price,
+                    y.provider,
+                    y.interestrate, 
+                    y.months, 
+                    y.payers, 
+                    y.open))
             list.append({
                 "handle":x.handle,
                 "name":x.name,
