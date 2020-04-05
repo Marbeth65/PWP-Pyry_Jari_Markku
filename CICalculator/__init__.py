@@ -25,6 +25,7 @@ def create_app(test_config=None):
         pass
     
     db.init_app(app)
+    
     from . import models
     app.cli.add_command(models.init_db_command)
     app.cli.add_command(models.populate_handle_command)

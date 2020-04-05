@@ -7,7 +7,8 @@ class Handle(db.Model):
     name = db.Column(db.String(64), nullable=False)                             # Henkilön tai yrityksen nimi, jolle tämä handle on tehty. Esim. Pyryn Kilpa-Auto (kuvitteellinen autokauppa)
     type = db.Column(db.String(64))  
 
-    paymentplans = db.relationship("Paymentplan", back_populates="handle")   
+    paymentplans = db.relationship("Paymentplan", back_populates="handle")
+    models = db.relationship("Model", back_populates="handle")
    
 class Paymentplan(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -18,8 +19,20 @@ class Paymentplan(db.Model):
     payers = db.Column(db.Integer, nullable=False)
     open = db.Column(db.Boolean, default=True)                     
     owner_name = db.Column(db.String(64), db.ForeignKey("handle.handle"))
+    model_name = db.Column(db.String(64), db.ForeignKey("model.model"))
     
     handle = db.relationship("Handle", back_populates="paymentplans")
+    model = db.relationship("Model", back_populates="paymentplans")
+    
+class Model(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    manufacturer = db.Column(db.String(64), nullable=False)
+    model = db.Column(db.String(64), nullable=False)
+    year = db.Column(db.Integer, nullable=False)
+    owner_name = db.Column(db.String(64), db.ForeignKey("handle.handle"))
+    
+    handle = db.relationship("Handle", back_populates="models")    
+    paymentplans = db.relationship("Paymentplan", back_populates="model")
     
 import click
 from flask.cli import with_appcontext
