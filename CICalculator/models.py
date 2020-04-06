@@ -25,6 +25,9 @@ class Paymentplan(db.Model):
     model = db.relationship("Model", back_populates="paymentplans")
     
 class Model(db.Model):
+    
+    __table_args__ = (db.UniqueConstraint("manufacturer", "model", "year", name="model_unique"), )
+
     id = db.Column(db.Integer, primary_key=True)
     manufacturer = db.Column(db.String(64), nullable=False)
     model = db.Column(db.String(64), nullable=False)
