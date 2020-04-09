@@ -1,5 +1,5 @@
 from flask_restful import Resource
-from CICalculator.models import Handle, Paymentplan
+from CICalculator.models import Handle, Paymentplan, Model, db
 
 '''
 Serves as a collection of all paymentplans
@@ -11,45 +11,29 @@ class PaymentplanCollection(Resource):
         '''
         lists all paymentplans
         '''
-        list = []
+        lista = []
         
-        handle = Handle.query.all()
+        count = Handle.query.count()
+
+        for i in range(1, count+1):
+            handle = Handle.query.get(i)
+            paymentplan = Paymentplan.query.get(i)
+            lista.append({
+                "handle":handle.handle,
+                "name":handle.name,
+                "type":handle.type,
+                "plan":str(handle.paymentplans)
+                })
+            db.session.commit()
         
-        for x in handle:
-            plans = x.paymentplans
-            planlist = []
-            for y in plans:
-                planlist.append((
-                    y.price,
-                    y.provider,
-                    y.interestrate, 
-                    y.months, 
-                    y.payers, 
-                    y.open))
-            list.append({
-                "handle":x.handle,
-                "name":x.name,
-                "type":x.type,
-                "plan":planlist
-            })
-            
-        return list, 201
+        return lista, 201
            
     
     def put(self):
         '''
         modify existing paymentplan by replacing the values with new ones
         '''
-        handle = request.json["handle"]
-        name = request.json["name"]
-        type = request.json["type"]
-        
-        Handle.query.filter_by(handle=handle).update({
-            "name": name,
-            "type": type   
-        })
-        db.session.commit()
-        return "", 201
+        pass
         
         
     def post(self):
