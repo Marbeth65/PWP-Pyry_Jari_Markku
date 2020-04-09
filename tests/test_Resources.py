@@ -52,7 +52,9 @@ def _populate_db():
         )
         db.session.add(item)
         db.session.commit()
-        
+
+    # ================================== Tässä laitetaan paymentplanit tuonne handleen =========================================
+    
     handle = Handle.query.first()                           # Ottaa ensimmäisen handlen
     paymentplan = Paymentplan.query.first()                 # Ottaa ensimmäisen paymentin
     handle.paymentplans.append(paymentplan)                 # lisää ensimmäisen handlen paymentplaneihin ensimmäisen planin
@@ -61,6 +63,7 @@ def _populate_db():
     handle.paymentplans.append(paymentplan2)                # laittaa ensimmäiseen handleen uuden planin
     db.session.commit()
 
+    # ==================================== tässä aletaan jo tehdä muita juttuja =================================================
     for x in range(4):
         model = Model(
         manufacturer="dummytoyota-{}".format(x),
@@ -69,12 +72,16 @@ def _populate_db():
         )
         db.session.add(model)
         db.session.commit()
-        
+
+    # ====================================== Täällä ehkä helpoin esimerkki. Handleen laitetaan uusi modeli =======================
+    
+    
     handle = Handle.query.first()                           # Ottaa ensimmäisen handlen
     model = Model.query.first()                             # Ottaa ensimmäisen modelin
-    handle.models.append(model)
+    handle.models.append(model)                             # Tämä on se rivi, joka rekisteröi handlen
     db.session.commit()
-    
+
+# ===================================================================================================================================    
 def _get_handle_json():
     return {"handle": "lisähandle", "type": "lisätype", "name": "lisäname"}
     
