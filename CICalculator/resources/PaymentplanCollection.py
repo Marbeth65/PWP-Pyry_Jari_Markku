@@ -18,11 +18,20 @@ class PaymentplanCollection(Resource):
         for i in range(1, count+1):
             handle = Handle.query.get(i)
             paymentplan = Paymentplan.query.get(i)
+            model = Model.query.get(i)
             lista.append({
                 "handle":handle.handle,
                 "name":handle.name,
                 "type":handle.type,
-                "plan":str(handle.paymentplans)
+                "price":paymentplan.price,
+                "provider":paymentplan.provider,
+                "interestrate":paymentplan.interestrate,
+                "months":paymentplan.months,
+                "payers":paymentplan.payers,
+                "open":paymentplan.open,
+                "manufacturer":model.manufacturer,
+                "model":model.model,
+                "year":model.year
                 })
             db.session.commit()
         
