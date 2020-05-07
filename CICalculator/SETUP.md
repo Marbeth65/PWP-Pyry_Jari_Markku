@@ -1,8 +1,9 @@
-Täällä ohjeita käyttöönottoon, kirjoitin suomeksi, jotta tulee ymmärrettävämpää, lopullinen versio tästä pitää sitten kääntää.
+This is a file that is supposed to help testing and using our API.
 
-Oletan, että teillä on kaikki tarvittavat kirjastot ladattuna. Jotta saatte ton toimimaan, teidän pitää laittaa tuolla cmd:ssä ainakin kaksi commandia.<br/>
+From external libraries you need Flask and SQLalchemy.
 
-Teidän pitää muuttaa flaskin nimi teiän path variableihin komennolla "set FLASK_APP=CICalculator" (huom. vaihtelee käyttöjärjestelmän mukaan)\
-Sitten teiän pitää luoda ittellenne oma database kirjoittamalla consoleen "flask init-db" \
-sitten voitte populatee sen niillä suunnittelemillani click-funktioilla. Huom! Se database sijaitsee sitten jossain muualla, sellasessa kansiossa ku instances. \
+Our API name is CICalculator so in order to test it you will have to locate to the directory in which the API is located and change flask application name with cmd command "set_FLASK_APP=CICalculator". In order to run tests you are going to have pytest installed and you have to also install our application to your pip directory with the setup file by typing "pip install -e ."
+
+Before running manual tests you should first initialize and populate database. Initializing database is done with "flask init-db"-command.
+For populating the database you can use designed click-functions in the models.py-file. "flask testgen" -command will populate database with enough dummy data to test all parts of our application. Unlike the wiki says, I dont have populated database in my repo. Thats because the database I used got really messy after I tried out various parts of my program and just generating and populating a new database is so easy.
 
