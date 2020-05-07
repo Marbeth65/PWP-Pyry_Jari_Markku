@@ -1,90 +1,94 @@
 from flask_restful import Resource
-from CICalculator.models import Handle, Paymentplan
-
+from CICalculator.models import Handle, Paymentplan, Model
+from flask import request
+from CICalculator import db
+from sqlalchemy.exc import IntegrityError
 '''
 Serves as a collection of all paymentplans
 '''
 
 class PaymentplanCollection(Resource):
     
-    def get(self):
+    def get(self, handle):
         '''
         lists all paymentplans
         '''
         list = []
+        kahva = Handle.query.filter_by(handle=handle).first()
+        plans = kahva.paymentplans
         
-        handle = Handle.query.all()
+        for x in plans:
+            d = {
+            "provider": x.provider,
+            "price": x.price,
+            "months": x.months,
+            }
+            if x.model_id != None:
+                model = Model.query.get(x.model_id)
+                d["model"] = model.model
+                d["manufacturer"] = model.manufacturer
+                d["year"] = model.year
+                
+            else:
+                d["model"] = "No model"
+                
+            list.append(d)
         
-        for x in handle:
-            plans = x.paymentplans
-            planlist = []
-            for y in plans:
-                planlist.append((
-                    y.price,
-                    y.provider,
-                    y.interestrate, 
-                    y.months, 
-                    y.payers, 
-                    y.open))
-            list.append({
-                "handle":x.handle,
-                "name":x.name,
-                "type":x.type,
-                "plan":planlist
-            })
-            
-        return list, 201
+        return list, 200
            
     
-    def put(self):
+    def put(self, handle):
         '''
-        modify existing paymentplan by replacing the values with new ones
+        modify existing handle by replacing the values with new ones
         '''
-        handle = request.json["handle"]
-        name = request.json["name"]
-        type = request.json["type"]
-        
+        handle = handle
+        try:
+            name = request.json["name"]
+            type = request.json["type"]
+        except KeyError:
+            return "Invalid request - missing fields", 400
         Handle.query.filter_by(handle=handle).update({
             "name": name,
             "type": type   
         })
         db.session.commit()
-        return "", 201
+        return "", 200
         
         
-    def post(self):
+    def post(self, handle):
         '''
         post a new paymentplan
         '''
-        
-        if not request.json:
-            abort(415)
-            
+        handle = Handle.query.filter_by(handle=handle).first()
         try:
-            item = Handle(
-                handle=request.json["handle"],
-                name=request.json["name"],
-                type=request.json["type"],
+            item = Paymentplan(
+            price = request.json["price"],
+            provider = request.json["provider"],
+            months = request.json["months"],
+            payers = request.json["payers"],
             )
-            db.session.add(item)
-            db.session.commit()
         except KeyError:
-            abort(400)
-        except IntegrityError:
-            abort(409)
+            return "Invalid request - missing keys", 400
+        if "interestrate" in request.json:
+            item.interestrate = request.json["interestrate"]
         
+        try:
+            db.session.add(item)
+            handle.paymentplans.append(item)
+            db.session.commit()
+        except IntegrityError:
+            return "Similart plan already exists", 409
         return "", 201
 
         
-    def delete(self):
+    def delete(self, handle):
         '''
-        deletes a handle and everything related to that handle
+        deletes the handle
         '''
-        handle = request.json["handle"]
         item = Handle.query.filter_by(handle=handle).first()
         db.session.delete(item)
         db.session.commit()
 
-        return "", 201
+        return "", 204
 
 print("PaymentplanCollection working")

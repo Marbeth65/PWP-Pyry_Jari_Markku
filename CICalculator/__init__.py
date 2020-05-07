@@ -4,14 +4,13 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-# Based on http://flask.pocoo.org/docs/1.0/tutorial/factory/#the-application-factory
-# Modified to use Flask SQLAlchemy
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY="dev",
         SQLALCHEMY_DATABASE_URI="sqlite:///" + os.path.join(app.instance_path, "development.db"),
-        SQLALCHEMY_TRACK_MODIFICATIONS=False
+        SQLALCHEMY_TRACK_MODIFICATIONS=False,
+        SEND_FILE_MAX_AGE_DEFAULT= 0   ## Uutta koodia developpaukseen, mahdollistaa sivun päivittämisen lennosta
     )
     
     if test_config is None:
@@ -30,12 +29,17 @@ def create_app(test_config=None):
     app.cli.add_command(models.init_db_command)
     app.cli.add_command(models.populate_handle_command)
     app.cli.add_command(models.populate_plans_command)
+    app.cli.add_command(models.generate_dummy)
     
     from . import api
     app.register_blueprint(api.api_bp)
     
-    @app.route('/hello', methods=["GET", "POST"])
-    def hello():
-        return 'Hello, World!'
+    @app.route("/admin/")
+    def admin_site():
+        return app.send_static_file("html/admin.html")
+        
+    @app.route("/main/")
+    def main_site():
+        return app.send_static_file("html/main.html")
 
     return app

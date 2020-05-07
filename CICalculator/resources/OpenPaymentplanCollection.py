@@ -20,6 +20,6 @@ class OpenPaymentplanCollection(Resource):
                 list.append(dict)
             else:
                 pass
-        return list, 201
+        return list, 200
         
     
