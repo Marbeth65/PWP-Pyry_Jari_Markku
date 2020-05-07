@@ -1,13 +1,8 @@
 from flask_restful import Resource
-<<<<<<< HEAD
 from CICalculator.models import Handle, Paymentplan, Model
 from flask import request
 from CICalculator import db
 from sqlalchemy.exc import IntegrityError
-=======
-from CICalculator.models import Handle, Paymentplan, Model, db
-
->>>>>>> 6730eb8c65eaf87716484e1e9d5f03b1a1d81a16
 '''
 Serves as a collection of all paymentplans
 '''
@@ -18,7 +13,6 @@ class PaymentplanCollection(Resource):
         '''
         lists all paymentplans
         '''
-<<<<<<< HEAD
         list = []
         kahva = Handle.query.filter_by(handle=handle).first()
         plans = kahva.paymentplans
@@ -41,40 +35,12 @@ class PaymentplanCollection(Resource):
             list.append(d)
         
         return list, 200
-=======
-        lista = []
-        
-        count = Handle.query.count()
-
-        for i in range(1, count+1):
-            handle = Handle.query.get(i)
-            paymentplan = Paymentplan.query.get(i)
-            model = Model.query.get(i)
-            lista.append({
-                "handle":handle.handle,
-                "name":handle.name,
-                "type":handle.type,
-                "price":paymentplan.price,
-                "provider":paymentplan.provider,
-                "interestrate":paymentplan.interestrate,
-                "months":paymentplan.months,
-                "payers":paymentplan.payers,
-                "open":paymentplan.open,
-                "manufacturer":model.manufacturer,
-                "model":model.model,
-                "year":model.year
-                })
-            db.session.commit()
-        
-        return lista, 201
->>>>>>> 6730eb8c65eaf87716484e1e9d5f03b1a1d81a16
            
     
     def put(self, handle):
         '''
         modify existing handle by replacing the values with new ones
         '''
-<<<<<<< HEAD
         handle = handle
         try:
             name = request.json["name"]
@@ -87,9 +53,6 @@ class PaymentplanCollection(Resource):
         })
         db.session.commit()
         return "", 200
-=======
-        pass
->>>>>>> 6730eb8c65eaf87716484e1e9d5f03b1a1d81a16
         
         
     def post(self, handle):
@@ -114,7 +77,7 @@ class PaymentplanCollection(Resource):
             handle.paymentplans.append(item)
             db.session.commit()
         except IntegrityError:
-            return "Similart plan already exists", 409
+            return "Similar plan already exists", 409
         return "", 201
 
         
