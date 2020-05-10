@@ -48,14 +48,14 @@ from flask.cli import with_appcontext
 
 @click.command("init-db")
 @with_appcontext
-def init_db_command():
+def init_db_command():                                  # pragma: no cover
     db.create_all()
     print("database created")
     
-@click.command("populate-handle")
+@click.command("populate-handle")                       # pragma: no cover
 @with_appcontext
 @click.argument("handle")
-def populate_handle_command(handle):
+def populate_handle_command(handle):                    # pragma: no cover
     item = Handle(
     handle=handle,
     name="dummyname",
@@ -68,7 +68,7 @@ def populate_handle_command(handle):
 @click.command("populate-plans")
 @with_appcontext
 @click.argument("lkm", type=int)
-def populate_plans_command(lkm):
+def populate_plans_command(lkm):                        # pragma: no cover
     for x in range(lkm):
         item = Paymentplan(
         price = 1000.0,

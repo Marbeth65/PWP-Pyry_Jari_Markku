@@ -2,6 +2,7 @@ from flask import request
 from flask_restful import Resource
 from CICalculator.models import Paymentplan, Handle, Model
 from CICalculator import db
+from CICalculator.utils.hypermedia import CICalcBuilder
 
 class PaymentplanItem(Resource):
     
@@ -9,22 +10,27 @@ class PaymentplanItem(Resource):
         plan = Paymentplan.query.filter_by(owner_name=handle).filter_by(provider=provider).filter_by(
         price=price).filter_by(months=months).first()
         if plan:
-            d = {
+            d = CICalcBuilder({
             "provider": plan.provider,
             "price": plan.price,
             "months": plan.months,
             "payers": plan.payers,
             "interestrate": plan.interestrate,
             "open": plan.open
-            }
+            })
+            d.add_control_toggle("/api/testiurl")
+            d.add_control_paymentplans_all()
             if plan.model_id != None:
                 model = Model.query.get(plan.model_id)
                 d["model"] = model.model
                 d["manufacturer"] = model.manufacturer
                 d["year"] = model.year
+                href = "/api/dummyhandle/models/" + model.manufacturer + "/" + model.model + "/" + str(model.year)
+                d.add_control_asso(href)
                 
             else:
                 d["model"] = "No model"
+                d.add_control_models_all()
             return d, 200
         else:
             return "No paymentplan found", 404

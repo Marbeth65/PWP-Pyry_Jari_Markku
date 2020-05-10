@@ -1,8 +1,9 @@
 from flask_restful import Resource
 from CICalculator.models import Handle, Paymentplan, Model
-from flask import request
+from flask import request, url_for
 from CICalculator import db
 from sqlalchemy.exc import IntegrityError
+from CICalculator.utils.hypermedia import CICalcBuilder
 '''
 Serves as a collection of all paymentplans
 '''
@@ -18,11 +19,13 @@ class PaymentplanCollection(Resource):
         plans = kahva.paymentplans
         
         for x in plans:
-            d = {
+            d = CICalcBuilder({
             "provider": x.provider,
             "price": x.price,
             "months": x.months,
-            }
+            })
+            href = "/api/dummyhandle/plans/" + x.provider + "/" + str(x.price) + "/" + str(x.months) # Not gonna mess with url_for_function
+            d.add_control_paymentplan_item(href)
             if x.model_id != None:
                 model = Model.query.get(x.model_id)
                 d["model"] = model.model
@@ -34,7 +37,12 @@ class PaymentplanCollection(Resource):
                 
             list.append(d)
         
-        return list, 200
+        response_body = CICalcBuilder({
+        "items":list
+        })
+        response_body.add_control_models_all()
+        response_body.add_control_paymentplans_open()
+        return response_body, 200
            
     
     def put(self, handle):

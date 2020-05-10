@@ -3,6 +3,7 @@ from flask_restful import Resource
 from CICalculator.models import Paymentplan, Handle, Model
 from CICalculator import db
 from sqlalchemy.exc import IntegrityError
+from CICalculator.utils.hypermedia import CICalcBuilder
 
 class ModelCollection(Resource):
     
@@ -14,13 +15,21 @@ class ModelCollection(Resource):
         plans = kahva.models
         list = []
         for x in plans:
-            dict = {
+            dict = CICalcBuilder({
             "manufacturer": x.manufacturer,
             "model": x.model,
             "year":x.year
-            }
+            })
+            href = "/api/dummyhandle/models/" + x.manufacturer + "/" + x.model + "/" + str(x.year)
+            dict.add_control_paymentplan_item(href) # Reusing paymentplan name. This is really model item
             list.append(dict)
-        return list, 200
+            
+        response_body = CICalcBuilder({
+        "items": list
+        })
+        response_body.add_control_post_model()
+        response_body.add_control_paymentplans_all()
+        return response_body, 200
         
     def post(self, handle):
         kahva = Handle.query.filter_by(handle=handle).first()

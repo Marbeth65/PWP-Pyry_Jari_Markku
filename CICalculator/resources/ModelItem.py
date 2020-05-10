@@ -2,6 +2,7 @@ from flask import request, abort
 from flask_restful import Resource
 from CICalculator.models import Paymentplan, Handle, Model
 from CICalculator import db
+from CICalculator.utils.hypermedia import CICalcBuilder
 
 class ModelItem(Resource):
     
@@ -12,13 +13,16 @@ class ModelItem(Resource):
             paymentplans = []
             for x in model.paymentplans:
                 paymentplans.append(x.provider)
-            dict = {
+            dict = CICalcBuilder({
             "model": model.model,
             "year": model.year,
             "manufacturer": model.manufacturer,
             "handle-name": model.owner_name,
             "paymentplans": paymentplans
-            }
+            })
+            dict.add_control_models_all()
+            url = "/api/dummyhandle/models/" + model.manufacturer + "/" + model.model + "/" + str(model.year)
+            dict.add_control_append_plan(url)
             return dict, 200
             
         else:
