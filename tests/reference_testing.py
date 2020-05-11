@@ -12,7 +12,6 @@ from CICalculator.resources import PaymentplanCollection
 @pytest.fixture
 def client():
     print("")
-    print("Aloitus")
     
     db_fd, db_fname = tempfile.mkstemp()
     config = {
@@ -32,7 +31,6 @@ def client():
     db.session.remove()
     os.close(db_fd)
     os.unlink(db_fname)
-    print("Lopetus")
 
 def _populate_db():
     for x in range(2):
@@ -45,16 +43,14 @@ def _populate_db():
         
     for x in range(4):
         item = Paymentplan(
-        price=1000.0,
+        price= 1000.0,
         provider="dummyprovider{}".format(x),
         months=6,
         payers=1,
         )
         db.session.add(item)
         db.session.commit()
-
-    # ================================== Tässä laitetaan paymentplanit tuonne handleen =========================================
-    
+        
     handle = Handle.query.first()                           # Ottaa ensimmäisen handlen
     paymentplan = Paymentplan.query.first()                 # Ottaa ensimmäisen paymentin
     handle.paymentplans.append(paymentplan)                 # lisää ensimmäisen handlen paymentplaneihin ensimmäisen planin
@@ -63,7 +59,6 @@ def _populate_db():
     handle.paymentplans.append(paymentplan2)                # laittaa ensimmäiseen handleen uuden planin
     db.session.commit()
 
-    # ==================================== tässä aletaan jo tehdä muita juttuja =================================================
     for x in range(4):
         model = Model(
         manufacturer="dummytoyota-{}".format(x),
@@ -72,33 +67,47 @@ def _populate_db():
         )
         db.session.add(model)
         db.session.commit()
-
-    # ====================================== Täällä ehkä helpoin esimerkki. Handleen laitetaan uusi modeli =======================
-    
-    
+        
     handle = Handle.query.first()                           # Ottaa ensimmäisen handlen
     model = Model.query.first()                             # Ottaa ensimmäisen modelin
-    handle.models.append(model)                             # Tämä on se rivi, joka rekisteröi handlen
+    paymentplan = Paymentplan.query.first()                 # Ottaa ensimmäisen paymentplanin
+    handle.models.append(model)
+    model.paymentplans.append(paymentplan)
     db.session.commit()
-
-# ===================================================================================================================================    
+    
+    
 def _get_handle_json():
     return {"handle": "lisähandle", "type": "lisätype", "name": "lisäname"}
     
 def _get_model_json():
     return {"manufacturer": "Volkswagen", "model": "jetta", "year": 2016}
     
+def _get_paymentplan_json():
+    return {"price":500, "months": 5, "payers": 2, "provider": "Jussin Auto", "interestrate": 0.05, "open": True}
+    
     
 class TestPaymentplanCollection(object):
 
-    RESOURCE_URL = "/api/plans"
+    RESOURCE_URL = "/api/asd0/plans"
     
     def test_get(self, client):
+        plans = Paymentplan.query.all()
+        print(len(plans))
         resp = client.get(self.RESOURCE_URL)
         assert resp.status_code == 201
         body = json.loads(resp.data)
         assert len(body) == 2
         
+        
+    def test_post(self, client):
+        valid = _get_paymentplan_json()
+        resp = client.post(self.RESOURCE_URL, json=valid)
+        assert resp.status_code == 201
+        plans = Paymentplan.query.all()
+        assert len(plans) == 5
+        plan = Paymentplan.query.get(5)
+        assert plan.provider == "Jussin Auto"
+        assert plan.owner_name == "asd0"
         
 class TestOpenPaymentplanCollection(object):
 
@@ -155,6 +164,15 @@ class TestModelItem(object):
         resp = client.post(self.RESOURCE_URL, json=valid)
         assert resp.status_code == 200
         body = json.loads(resp.data)
+        
+class TestPaymentplanItem(object):
+
+    RESOURCE_URL = "/api/asd0/plans/1000.0/dummyprovider0/6/1/"
+    
+    def test_get(self, client):
+        resp = client.get(self.RESOURCE_URL)
+        assert resp.status_code == 201
+        body = json.loads(resp.data)
         print(body)
         
 def test_unique_models(client):
@@ -167,14 +185,48 @@ def test_unique_models(client):
     with pytest.raises(IntegrityError):
         db.session.commit()
         
+def test_append_to_handle(client):
+    handle = Handle.query.first()
+    paymentplan = Paymentplan.query.first()
+    model = Model.query.first()
+    
+    handle.paymentplans.append(paymentplan)
+    handle.models.append(model)
+    db.session.commit()
+    
+def test_append_to_paymentplan(client):
+    handle = Handle.query.first()
+    paymentplan = Paymentplan.query.first()
+    model = Model.query.first()
 
+    #paymentplan.model.append(model)                Ei toimi!
+    #paymentplan.handle.append(handle)
+    
+def test_append_to_model(client):
+    paymentplan = Paymentplan.query.get(2)
+    model = Model.query.first()
+
+    model.paymentplans.append(paymentplan)
+    db.session.commit()
+    
+    assert len(model.paymentplans) == 2
+        
+def test_paymentplan_model_one_to_one(client):
+    payment = Paymentplan.query.first()
+    model = Model.query.get(2)
+    model.paymentplans.append(payment)
+    db.session.commit()
         
         
         
         
-        
-        
-        
-        
-        
-        
+ 
+
+
+
+
+
+
+
+
+ 
