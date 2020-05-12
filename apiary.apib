@@ -1,0 +1,511 @@
+FORMAT: 1A
+HOST: http://localhost:5000/
+
+# Car installment calculator
+
+This api is designed to make managing paymentplans easy. The API serves JSON data extended by the [Mason hypermedia format](https://github.com/JornWildt/Mason). Custom link relations and resource profiles have been included in this API document - they are not resources.
+
+# Group Link Relations
+
+This section described custom link relations defined in this API.
+
+## toggle
+
+This hypermedia control is ment to help to turn paymentplans open-field on and off. The method is PUT since it edits information but there is no need for a request body since our API knows what to do.
+
+## plans-all
+
+Takes you to the collection of paymentplans. This must be used with a GET method
+
+## models-all
+
+Takes you to the collection of models known to api
+
+## plans-open
+
+Takes you to the collection of open paymentplans. This is a subcategory of all paymentplans that returns only those paymentplans that are still open. GET method required.
+
+## add-model
+
+Used to POST models to the Model Collection
+
+## append-plan
+
+This control is for adding plans to a model. This is done by POSTing  all the required information about the plan to the Model Item resource. Schema required.
+
+## asso
+
+This control is only present in paymentplans that already have a model associated with them. This takes you to the associated Model Item resource.
+
+# Group Profiles
+
+This section includes resource profiles which provide semantic descriptions for the attributes of each resource, as well as the list of controls (by link relation) available from that resource.
+
+## Paymentplan profile
+
+Profile to all resources that are related to paymentplans
+
+### Link relations
+
+List of all possible links related to paymentplans: plans-all, asso, plans-open, toggle. IANA "self" -control is used to move from collection to individual item.
+
+### Semantic Descriptors
+
+#### Data type Paymentplan
+
+ * `provider`: Person or entity that provides certain paymentinformation, string
+ * `price`: The price of the paymentplan, float
+ * `months`: The amount of monthly payments used to complete the payment, integer
+ * `payers`: If multiple parties decide to pay the item they can use this field, integer
+ * `interestrate`: The amount of interestrate for a payment.
+
+## Model profile
+
+Profile to all resources related to models
+
+### Link relations
+
+All possible links related to models: models-all, add-model, append-plan
+
+### Semantic Descriptors
+
+#### Data type Model
+
+ * `manufacturer`: Manufacturer of the model, string
+ * `model`: Model of the model, string
+ * `year`: Year of the model, integer
+
+# Group Resources
+
+All of these resources use the [Paymentplan profile]
+
+## Paymentplan Collection [/api/{handle}/plans]
+
+Collection of all paymentplans for a handle
+
+
++ Parameters
+
+    + handle(string, unique) - A handle for grouping sets of paymentplans(handle)
+
+    
+### List of all paymentplans that are associated with the handle [GET]
+
++ request
+
+    + headers 
+    
+            Accept: application/vnd.mason+json
+        
++ Response 200 (application/vnd.mason+json)
+
+    + Body
+
+            {
+                "items":[{
+                    "provider": "dummyprovider-3",
+                    "price": 1998.0,
+                    "months": 2,
+                    "@controls":{
+                    "self":{
+                    "method": "GET",
+                    "href": "/api/dummyhandle/plans/dummyprovider-3/1998.0/2"
+                    }
+                    },
+                    "model": "Corolla",
+                    "manufacturer": "Toyota",
+                    "year": 2007
+                    },
+                    {
+                    "provider": "dummyprovider-4",
+                    "price": 1137.0,
+                    "months": 2,
+                    "@controls":{
+                    "self":{
+                    "method": "GET",
+                    "href": "/api/dummyhandle/plans/dummyprovider-4/1137.0/2"
+                    }
+                    },
+                    "model": "Corolla",
+                    "manufacturer": "Toyota",
+                    "year": 2007
+                    }
+                    ]
+                "@controls":{
+                    "cicalc:models-all":{
+                    "method": "GET",
+                    "href": "/api/dummyhandle/models"
+                    },
+                    "cicalc:plans-open":{
+                    "method": "GET",
+                    "href": "/api/dummyhandle/plans/open"
+                    }
+                    }
+            }
+
+### Modify handle[PUT]
+
++ request
+
+    + headers 
+    
+            Accept: application/vnd.mason+json
+        
+    + Body
+        
+            {
+                {
+                "name" : "Pyrynhandle",
+                "type" : "Individual"
+                }
+            
+            }
+
++ Response 200 (application/vnd.mason+json)
+
+### Delete handle[DELETE]
+
++ request
+
+    + headers 
+    
+            Accept: application/vnd.mason+json
+        
++ Response 204 (application/vnd.mason+json)
+
+        
+### Posts a new Paymentplan[POST]
+
++ request
+
+    + headers 
+    
+            Accept: application/vnd.mason+json
+        
+    + Body
+    
+            {
+            "price": 10238.0,
+            "interestrate": 5.0,
+            "months": 6,
+            "provider": "PyrynSuperAutot"
+            "payers": 1,
+            "open": True,
+            }
+        
++ Response 201 (application/vnd.mason+json)
+
++ Response 400 (application/vnd.mason+json)
+
++ Response 409 (application/vnd.mason+json)
+
+
+## Open Paymentplan Collection [/api/{handle}/paymentplans/open]
+
+Collection of paymentplans that haven't been paid yet
+
++ Parameters
+
+    + handle(string, unique) - A handle for grouping sets of paymentplans(handle)
+    
+
+### Lists all open paymentplans under the handle [GET]
+
++ request
+
+    + headers 
+    
+            Accept: application/vnd.mason+json
+        
++ Response 200 (application/vnd.mason+json)
+
+    + Body
+            {
+            "items": [{
+                "price": 1998.0,
+                "provider": "dummyprovider-3",
+                "months": 2,
+                "open": true,
+                "@controls":{
+                "self":{
+                "method": "GET",
+                "href": "/api/dummyhandle/plans/dummyprovider-3/1998.0/2"
+                }
+                }
+                }],
+            @controls":{
+            "cicalc:plans-all":{
+            "method": "GET",
+            "href": "/api/dummyhandle/plans"
+            }
+            }
+            }
+
+## Model Collection [/{handle}/models]
+
+Collection of all the models that are associated with the handle
+
++ Parameters
+
+    + handle(string, unique) - A handle for grouping sets of paymentplans(handle)
+
+### Gives all Models associated with the handle[GET]
+
++ request
+
+    + headers 
+    
+            Accept: application/vnd.mason+json
+        
++ Response 200 (application/vnd.mason+json)
+
+    + Body
+    
+            {
+            "items": [{
+            "manufacturer": "Toyota",
+            "model": "Corolla",
+            "year": 2007,
+            "@controls":{
+            "self":{
+            "method": "GET",
+            "href": "/api/dummyhandle/models/Toyota/Corolla/2007"
+            }
+            }
+            }],
+            "@controls":{
+            "cicalc:add-model":{
+            "method": "POST",
+            "schema":{
+            "type": "object",
+            "required":[
+            "manufacturer",
+            "model",
+            "year"
+            ],
+            "properties":{
+            "manufacturer":{"type": "string", "description": "manufacturer of model"},
+            "model":{"type": "string"},
+            "year":{"type": "number"}
+            }
+            },
+            "href": "/api/dummyhandle/models"
+            },
+            "cicalc:plans-all":{
+            "method": "GET",
+            "href": "/api/dummyhandle/plans"
+            }
+            }
+            }
+
+### Posts a new model to the collection[POST]
+
++ request
+
+    + headers 
+    
+            Accept: application/vnd.mason+json
+        
+    + Body
+    
+            {
+            "manufacturer": "Toyota",
+            "model": "Corolla",
+            "year": 2000
+            }
+        
++ Response 200 (application/vnd.mason+json)
+
++ Response 400 (application/vnd.mason+json)
+
++ Response 409 (application/vnd.mason+json)
+
+## Model Item [/api/{handle}/models/{manufacturer}/{model}/{year}]
+
+Individual model item for inspection and editing
+
++ Parameters
+
+    + handle(string) - A handle for grouping sets of paymentplans(handle)
+
+    + manufacturer - Name of the manufacturer(manufacturer)
+
+    + model(string) - Name of the model(model)
+
+    + year(integer) - Year of the model(year)
+
+### Gives the information about a model for inspection and editing [GET]
+
++ request
+
+    + headers 
+    
+            Accept: application/vnd.mason+json
+        
++ Response 200 (application/vnd.mason+json)
+
+    + Body
+    
+                {
+                "model": "Spring",
+                "year": 2013,
+                "manufacturer": "Lamborgini",
+                "handle-name": "dummyhandle",
+                "paymentplans":[
+                ],
+                "@controls":{
+                "cicalc:models-all":{
+                "method": "GET",
+                "href": "/api/dummyhandle/models"
+                },
+                "cicalc:append-plan":{
+                "method": "POST",
+                "schema":{
+                "type": "object",
+                "required":[
+                "provider",
+                "price",
+                "months"
+                ],
+                "properties":{
+                "provider":{"type": "string"},
+                "price":{"type": "number"},
+                "months":{"type": "number"}
+                }
+                },
+                "href": "/api/dummyhandle/models/Lamborgini/Spring/2013"
+                }
+                }
+                }
+
++ Response 404 (application/vnd.mason+json)
+
+### Modifies the model [PUT]
+
++ request
+
+    + headers 
+    
+            Accept: application/vnd.mason+json
+        
+    + Body
+    
+            {
+                "manufacturer": "Volkswagen",
+                "model": "Jetta",
+                "year": 2010
+            }
+        
++ Response 200 (application/vnd.mason+json)
+
+### Deletes the model [DELETE]
+
++ request
+
+    + headers 
+    
+            Accept: application/vnd.mason+json
+        
++ Response 200 (application/vnd.mason+json)
+
+### Appends paymentplan to model [POST]
+
++ request
+    
+    + headers 
+    
+            Accept: application/vnd.mason+json
+        
+    + Body
+    
+            {
+            "paymentplan_provider": "Petteri"
+            "paymentplan_price": 1200.0,
+            "paymentplan_months": 3
+            }
+
++ Response 201 (application/vnd.mason+json)
+
++ Response 404 (application/vnd.mason+json)
+
+## Paymentplan Item [/{handle}/plans/{provider}/{price}/{months}]
+
+Individual Paymentplan for inspection and editing
+
++ Parameters
+
+    + handle(string, unique) - A handle for grouping sets of paymentplans(handle)
+
+    + provider(string) - paymentplans provider such as company(provider)
+
+    + price(float) - price of the payment(price)
+
+    + months(integer) - the amount of months
+
+### Gives the information about the paymentplan for inspection and editing [GET]
+
++ request
+
+    + headers 
+    
+            Accept: application/vnd.mason+json
+        
++ Response 200 (application/vnd.mason+json)
+
+    + Body
+    
+            {
+            "provider": "dummyprovider-3",
+            "price": 1998.0,
+            "months": 2,
+            "payers": 3,
+            "interestrate": 5.832423679187837,
+            "open": true,
+            "@controls":{
+            "cicalc:toggle":{
+            "method": "PUT",
+            "description": "Toggles plans open-field",
+            "href": "/api/testiurl"
+            },
+            "cicalc:plans-all":{
+            "method": "GET",
+            "href": "/api/dummyhandle/plans"
+            },
+            "cicalc:asso":{
+            "method": "GET",
+            "href": "/api/dummyhandle/models/Toyota/Corolla/2007"
+            }
+            },
+            "model": "Corolla",
+            "manufacturer": "Toyota",
+            "year": 2007
+            }
+
++ Response 404 (application/vnd.mason+json)
+
+### Modifies the paymentplan [PUT]
+
+Toggles paymentplans open field
+
++ request
+
+    + headers 
+    
+            Accept: application/vnd.mason+json
+        
+        
++ Response 200 (application/vnd.mason+json)
+
++ Response 404 (application/vnd.mason+json)
+
+### Deletes the model [DELETE]
+
++ request
+
+    + headers 
+    
+            Accept: application/vnd.mason+json
+        
++ Response 200 (application/vnd.mason+json)
+
++ Response 404 (application/vnd.mason+json)
