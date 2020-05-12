@@ -211,9 +211,11 @@ class TestModelCollection(object):
         assert resp.status_code == 200
         
         body = json.loads(resp.data)
-        assert len(body) == 3 # Populate_db creates two models so correct lenght is 2
+        assert len(body["items"]) == 3 # Populate_db creates two models so correct lenght is 3
+        assert "@controls" in body
+        assert "cicalc:plans-all" in body["@controls"]
         
-        new = body[2]
+        new = body["items"][2]
         assert new["manufacturer"] == "BMW"
         assert new["model"] == "compact"
         
