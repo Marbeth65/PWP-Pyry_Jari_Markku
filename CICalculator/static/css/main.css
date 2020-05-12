@@ -1,0 +1,234 @@
+/* Color scheme used in this website is called "HARBOR" and is taken from shutterstock
+https://www.shutterstock.com/blog/10-gorgeous-color-schemes-for-websites?kw=&gclsrc=aw.ds&gclid=CjwKCAjw7-P1BRA2EiwAXoPWA4x8tRUY6OU2IKUrZuLM8sPMR2iFVXGDKrfuYf0rycFzM7O0w2rSxxoCY7sQAvD_BwE
+Colours are(hex): 354649 / 6C7A89 / A3C6C4 / E0E7E9
+ */
+
+
+* {
+    margin: 0px;
+    padding: 0px;   
+    font-family: 'Open Sans', sans-serif;
+}
+
+h1 {
+    color: red;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    margin-bottom: 40px;
+    margin-top: 60px;
+}
+
+h2 {
+    text-align: center;
+    margin: 20px;
+    padding: 10px;
+}
+
+p {
+    font-size: 20px;
+    padding: 5px;
+    margin: 10px;
+}
+body {
+    background-color: #354649;
+}
+
+.sisalto {
+    width: 1200px;
+    border: 1px solid black;
+    margin: auto;
+    margin-bottom: 300px;
+}
+.AllPayments {
+    display: flex;
+    justify-content: space-around;
+    
+}
+.AllPayments > * {
+    min-height: 200px;
+    background-color: rgb(201, 201, 201);
+    width: 380px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid black;
+}
+
+td {
+    color: black;
+    margin: 10px;
+    padding: 5px;
+}
+table {
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.AllControls {
+    display: flex;
+    justify-content: center;
+}
+
+#Allbackbutton, #Allforthbutton {
+    border: 1px solid black;
+    padding: 10px;
+    margin: 20px;
+    background-color: rgb(201, 201, 201)
+}
+
+#infoPseudo {
+    width: 100px;
+    visibility: hidden;
+}
+.items {
+    display: flex;
+    justify-content: space-around;
+}
+
+.items > * {
+    min-height: 200px;
+    background-color: rgb(201, 201, 201);
+    width: 380px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid black;
+}
+
+#middleItemButtons {
+    width: 100px;
+    flex-direction: column;
+    align-items: center;
+}
+
+#middleItemButtons > * {
+    margin: 10px;
+    margin-top: 30px;
+    padding: 10px;
+    width: 80%;
+}
+
+.bottomItemButtons {
+    display: flex;
+    justify-content: space-around;
+}
+
+.bottomItemButtons > * {
+    min-height: 50px;
+    background-color: rgb(201, 201, 201);
+    width: 380px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid black;
+    display: flex;
+    justify-content: space-around;
+}
+
+#delButton, #openButton {
+    margin: 5px;
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+#modifyPseudo {
+    width: 100px;
+    visibility: hidden;
+}
+
+.info {
+    display: flex;
+    justify-content: space-around;
+}
+
+.info > * {
+    min-height: 50px;
+    background-color: rgb(201, 201, 201);
+    width: 380px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid black;
+}
+
+.AllModels {
+    display: flex;
+    justify-content: space-around;
+    
+}
+.AllModels > * {
+    min-height: 200px;
+    background-color: rgb(201, 201, 201);
+    width: 380px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid black;
+}
+
+.modelControls {
+    display: flex;
+    justify-content: center;
+}
+
+#modelBackButton, #modelForthButton {
+    border: 1px solid black;
+    padding: 10px;
+    margin: 20px;
+    background-color: rgb(201, 201, 201)
+}
+
+.posts {
+    display: flex;
+    justify-content: space-around;
+    
+}
+.posts > * {
+    min-height: 200px;
+    background-color: rgb(201, 201, 201);
+    width: 380px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid black;
+}
+
+.postButtons {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 50px;
+    
+}
+.postButtons > * {
+    height: 50px;
+    background-color: rgb(201, 201, 201);
+    width: 380px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid black;
+    display: flex;
+    justify-content: space-around;
+}
+
+#postp, #postm {
+    padding: 10px;
+    margin: 5px;
+}
+
+/* Colour scheme 
+Colours are(hex): 354649 / 6C7A89 / A3C6C4 / E0E7E9
+*/
+
+body {
+    background-color:#354649;
+    
+}
+* {
+    color: #354649; 
+}
+h1 {
+   color: #354649;    
+}
+.sisalto {
+    background-color: #E0E7E9;   
+}
+.AllPayments > *, .AllModels > *, .postButtons > *, .items > *, .bottomItemButtons > *, .info > *, .posts > * {
+    background-color: #A3C6C4;
+    border-radius: 3px;
+}
