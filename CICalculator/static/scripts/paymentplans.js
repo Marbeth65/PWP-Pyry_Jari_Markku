@@ -10,11 +10,13 @@ let All3_link = "";
 let assoModel = false;
 let paymentContainer_link = {};
 
+// This function feeds data to the fucntion that handles paymentplan browsing
+
 function renderPayment(data) {
     let i;
     let pack = [];
     
-    // datan esikäsittely
+    // shift data until desired index is met
     
     for (i = 0; i < AllIndex; i++) {
         data["items"].shift();
@@ -35,6 +37,8 @@ function renderPayment(data) {
     }
 
 function postPayment(){
+    // For posting paymentplans
+    
     let $provider = $("#providerButton");
     let $price = $("#priceButton");
     let $months = $("#monthButton");
@@ -49,10 +53,11 @@ function postPayment(){
     }    
     
     if ($interestrate.val() != ""){
-        postObject["interestrate"] = parseFloat($interestrate.val());
+        postObject["interestrate"] = parseFloat($interestrate.val()); // interestrate is optional
     } else {
         postObject["interestrate"] = 0;
     }
+    
     $.ajax({
     type: "POST",
     url: "/api/dummyhandle/plans",
@@ -71,6 +76,8 @@ function postPayment(){
 
 function appendTable(object){
     
+    // data from render payment is fed here to be appended to html tables
+    
     let $AllCont1 = $("#All1 > table"); 
     let $AllCont2 = $("#All2 > table");
     let $AllCont3 = $("#All3 > table");
@@ -88,7 +95,7 @@ function appendTable(object){
         }
     });
     
-    All1_link = object[0]["@controls"]["self"]["href"];
+    All1_link = object[0]["@controls"]["self"]["href"];         // hypermedialink to mempory
     console.log(All1_link)
     if (object.length > 1) {
     
@@ -96,11 +103,11 @@ function appendTable(object){
         if (key == "@controls") {
             
         } else {
-        let row = "<tr><td>" + key + "</td><td>" + value + "</td></tr>"
+        let row = "<tr><td>" + key + "</td><td>" + value + "</td></tr>"     // apend table. It appears to be missing ; but I dont want to touch it since it works
         $AllCont2.append(row);
         }
     });  
-    All2_link = object[1]["@controls"]["self"]["href"];
+    All2_link = object[1]["@controls"]["self"]["href"];         // and here
     console.log(All2_link);
     }
     
@@ -114,7 +121,7 @@ function appendTable(object){
         $AllCont3.append(row);
         }
     });
-    All3_link = object[2]["@controls"]["self"]["href"];
+    All3_link = object[2]["@controls"]["self"]["href"];         // and here
     console.log(All3_link);
     }
 };
@@ -132,9 +139,13 @@ function renderItem(data) {
     let $paymentInfo = $("#paymentPlanInfo");
     let iPrice;
     
+    // clear previous data
+    
     $payment.empty();
     $model.empty();
     $paymentInfo.empty();
+    
+    // Append information
     
     $payment.append("<tr><td>Provider:</td><td>" + data.provider + "</td></tr>");
     $payment.append("<tr><td>Price:</td><td>" + data.price + "</td></tr>");
@@ -142,15 +153,15 @@ function renderItem(data) {
     $payment.append("<tr><td>Months:</td><td>" + data.months + "</td></tr>");
     $payment.append("<tr><td>Payers:</td><td>" + data.payers + "</td></tr>");
     
-    if (data.model != "No model") {
+    if (data.model != "No model") {         // if there is model it is appended
     $model.append("<tr><td>Model:</td><td>" + data.model + "</td></tr>");
     $model.append("<tr><td>manufacturer:</td><td>" + data.manufacturer + "</td></tr>");
     $model.append("<tr><td>year:</td><td>" + data.year + "</td></tr>");
     assoModel = true;
     modelContainer_link = {}
     } else {
-        $model.append("<tr><td>No model</td></tr>");
-        assoModel = false;
+        $model.append("<tr><td>No model</td></tr>"); // signs that there is no model
+        assoModel = false;                              // this boolean prevents browsing models when there is already model associated
         modelContainer_link = {}
     }
     
@@ -163,9 +174,9 @@ function renderItem(data) {
     }
     
     iPrice = Math.round(data.price * (1 + (data.interestrate / 100)));
-    $paymentInfo.append("<p>Kokonaishinta on " + iPrice + " ja yksittäisen henkilön kuukausihinta on: " + ((iPrice / data.months) / data.payers) + "</p>");
+    $paymentInfo.append("<p>Kokonaishinta on " + iPrice + " ja yksittäisen henkilön kuukausihinta on: " + ((iPrice / data.months) / data.payers) + "</p>"); // some basic information
     
-    paymentContainer_link = data;
+    paymentContainer_link = data;       // taking dictionary to memory since it can be used to send POST requests
 }
 $(document).ready(function(){
     

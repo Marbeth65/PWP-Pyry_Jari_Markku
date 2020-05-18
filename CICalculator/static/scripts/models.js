@@ -2,13 +2,15 @@
 
 console.log("Models toimii");
 
-let modelIndex = 0;
-let model1_link = "";
+let modelIndex = 0;                 // This variable stores the index from which models are added to fields
+let model1_link = "";               // these are hypermedialinks that are taken after GET request to item
 let model2_link = "";
 let model3_link = "";
 let modelContainer_link = {};
 
 function postModel(){
+    // While posting models all fields are mandatory
+    
     let $manufacturer = $("#manufacturerInput");
     let $model = $("#modelInput");
     let $year = $("#yearInput");
@@ -18,7 +20,7 @@ function postModel(){
     year: parseInt($year.val()),
     manufacturer: $manufacturer.val(),
     }
-    console.log(postObject);
+
     $.ajax({
         type: "POST",
         url: "/api/dummyhandle/models",
@@ -44,6 +46,7 @@ function getResource(href, renderFunction) {
 
 function appendModelTable(object){
     
+    // this function simply appends data to tables. It is fed in packs of up to 3
     let $modelCont1 = $("#models1 > table"); 
     let $modelCont2 = $("#models2 > table");
     let $modelCont3 = $("#models3 > table");
@@ -94,6 +97,8 @@ function renderModels(data){
     let pack = [];
     let plan;
     
+    // this function feeds paymentplans to appendModelTable
+    
     for (i = 0; i < modelIndex; i++) { // Datan esikäsittely
         data["items"].shift();
     }
@@ -120,7 +125,7 @@ function renderModelItem1(data) {
     $modelItemTable.append("<tr><td>Model:</td><td>" + data["model"] + "</td></tr>");
     $modelItemTable.append("<tr><td>year:</td><td>" + data["year"] + "</td></tr>");
     
-    modelContainer_link = data;
+    modelContainer_link = data;     // this data isnt use as it is since I can use hypermedia instead.
 }
 
 $(document).ready(function(){
@@ -135,6 +140,8 @@ $(document).ready(function(){
     });
     
     $("#models1").click(function(){
+        // these if statements make sure that you cant browse models when there is already associated model
+        
         if (assoModel == false){
         getResource(model1_link, renderModelItem1);
         }
