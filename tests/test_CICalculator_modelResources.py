@@ -8,6 +8,7 @@ from CICalculator import create_app, db
 from CICalculator.models import  Handle, Paymentplan, Model
 from sqlalchemy.exc import IntegrityError
 
+
 @pytest.fixture
 def client():
     print("")
@@ -135,14 +136,18 @@ class TestModelItem(object):
     MODIFIED_URL = "/api/dummyhandle/models/BMW/compact/2000"
     
     def test_get(self, client):
-        # tests that get request is valid
+        ''' tests that get request is valid '''
     
         resp = client.get(self.RESOURCE_URL)
         body = json.loads(resp.data)
         assert resp.status_code == 200
         
+        resp = client.get(self.WRONG_RESOURCE_URL)
+        assert resp.status_code == 404
+        
     def test_post(self, client):
-        # Tests that posting to model works
+        ''' Tests that posting to model works and various errors '''
+        
         valid = {"paymentplan_price":1000.0, "paymentplan_provider":"dummyprovider-0", "paymentplan_months":1}
         resp = client.post(self.RESOURCE_URL, json=valid)
         assert resp.status_code == 201
@@ -169,16 +174,24 @@ class TestModelItem(object):
         resp = client.post(self.WRONG_RESOURCE_URL, json=valid)
         assert resp.status_code == 404
         
+        resp = client.post(self.RESOURCE_URL)
+        assert resp.status_code == 415
+        
     def test_delete(self, client):
+    
+        ''' Tests that deleting works and that URL vanishes after delete. Also tests 404 error '''
         resp = client.delete(self.RESOURCE_URL)
         assert resp.status_code == 204  # Tests that code is right
         
         resp = client.get(self.RESOURCE_URL)
         body = json.loads(resp.data)    # Assures that URL of the item vanished after delete leading to 404 error
         assert resp.status_code == 404 
+        
+        resp = client.delete(self.WRONG_RESOURCE_URL)
+        assert resp.status_code == 404
 
     def test_put(self, client):
-        # Tests that model is modified by put. Correct URL vanishes after edit.
+        ''' Tests that model is modified by put. Correct URL vanishes after edit. Also tests 400, 404 and 415 errors '''
         
         valid = _get_model()
         resp = client.put(self.RESOURCE_URL, json=valid)
@@ -188,24 +201,44 @@ class TestModelItem(object):
         assert resp.status_code == 404 # After modification changes the url is also modified meaning that RESOURCE_URL no longer works
         
         resp = client.get(self.MODIFIED_URL)
-        assert resp.status_code == 200
-              
+        assert resp.status_code == 200 # Asserts that new item has URL
+        
+        invalid = {"omg": "petteri"}
+        resp = client.put(self.RESOURCE_URL, json=invalid)
+        assert resp.status_code == 400
+        
+        resp = client.put(self.RESOURCE_URL)
+        assert resp.status_code == 415
         
 class TestModelCollection(object):
     
     RESOURCE_URL = "/api/dummyhandle/models"
+    WRONG_RESOURCE_URL = "/api/lol/models"
     
     def test_get(self, client):
+        ''' Tests model collections get method lenght and 404 error '''
+        
         resp = client.get(self.RESOURCE_URL)
         assert resp.status_code == 200
         
         body = json.loads(resp.data)
-        assert len(body) == 2 # Populate_db creates two models so correct lenght is 2
+        assert len(body["items"]) == 2 # Populate_db creates two models so correct lenght is 2
+        
+        resp = client.get(self.WRONG_RESOURCE_URL)
+        assert resp.status_code == 404
         
     def test_post(self, client):
+    
+        ''' Tests postint and 404, 400 and 415 errors '''
+        resp = client.post(self.RESOURCE_URL)
+        assert resp.status_code == 415
+        
         valid = _get_model()
         resp = client.post(self.RESOURCE_URL, json=valid)
         assert resp.status_code == 202
+        
+        resp = client.post(self.WRONG_RESOURCE_URL, json=valid)
+        assert resp.status_code == 404
         
         resp = client.get(self.RESOURCE_URL)
         assert resp.status_code == 200
@@ -219,7 +252,25 @@ class TestModelCollection(object):
         assert new["manufacturer"] == "BMW"
         assert new["model"] == "compact"
         
+        invalid = _get_model()
+        invalid["year"] = "petteri"
+        resp = client.post(self.RESOURCE_URL, json=invalid)
+        assert resp.status_code == 400
+ 
+    def test_post_no_dublicate(self, client):
+        
+        ''' Tests that you can not post duplicate items. This has own section because I dont really understand how that runback mechanic works '''
+        
+        valid = _get_model()
+        resp = client.post(self.RESOURCE_URL, json=valid) 
+        resp = client.post(self.RESOURCE_URL, json=valid)
+        assert resp.status_code == 409
+
+        
     def test_post_400_error(self, client):
+    
+        ''' Another invalid request error tester '''
+        
         unvalid = {"petteri": "lol"}
         resp = client.post(self.RESOURCE_URL, json=unvalid)
         assert resp.status_code == 400                      # Tests that missing keys result to 400 error
@@ -230,6 +281,10 @@ class TestModelCollection(object):
         assert resp.status_code == 400                      # Tests that invalid integer results to 400 error
     
     def test_integrityError(self, client):
+    
+        ''' Tests 409 error '''
+        
+        
         duplicate = {"manufacturer":"Toyota", "model":"Corolla", "year": 2007} # Tests that posting duplicate model results to 409 error
         resp = client.post(self.RESOURCE_URL, json=duplicate)
         assert resp.status_code == 409

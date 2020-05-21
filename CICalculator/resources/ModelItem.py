@@ -8,6 +8,9 @@ class ModelItem(Resource):
     
     def get(self, handle, manufacturer, model, year):
         
+        ''' gets an individual model for inspection and editing 
+        Errors: 404
+        ''' 
         model = Model.query.filter_by(manufacturer=manufacturer).filter_by(model=model).filter_by(year=year).filter_by(owner_name=handle).first()
         if model:
             paymentplans = []
@@ -29,10 +32,20 @@ class ModelItem(Resource):
             return "No model found", 404
         
     def put(self, handle, manufacturer, model, year):
-        ''' modifies but doesnt add new handle or paymentplan yet '''
-        newmodel = request.json["model"]
-        newmanufacturer = request.json["manufacturer"]
-        newyear = request.json["year"]
+        ''' modifies but doesnt add new handle or paymentplan yet. Errors 415, 400
+        
+        '''
+        if not request.json:
+            return "Unsupported media type", 415
+        
+        try:
+            newmodel = request.json["model"]
+            newmanufacturer = request.json["manufacturer"]
+            newyear = request.json["year"]
+            
+        except KeyError:
+            return "Invalid request, missing fields", 400
+            
         model = Model.query.filter_by(manufacturer=manufacturer).filter_by(model=model).filter_by(year=year).filter_by(owner_name=handle).update({
         "model": newmodel,
         "manufacturer": newmanufacturer,
@@ -43,14 +56,22 @@ class ModelItem(Resource):
         
     def delete(self, handle, manufacturer, model, year):
         
+        ''' Deletes model. Errors 404 '''
+        
         model = Model.query.filter_by(manufacturer=manufacturer).filter_by(model=model).filter_by(year=year).filter_by(owner_name=handle).first()
+        if not model:
+            return "Model not found", 404
         db.session.delete(model)
         db.session.commit()
         return "", 204
         
     def post(self, handle, manufacturer, model, year):
         
-        ''' posts a new paymentplan to the model '''
+        ''' posts a new paymentplan to the model. Errors 415, 400, 404
+        '''
+        
+        if not request.json:
+            return "Unsupported mediatype", 415
         
         model = Model.query.filter_by(manufacturer=manufacturer).filter_by(model=model).filter_by(year=year).filter_by(owner_name=handle).first()
         if model:
@@ -60,6 +81,10 @@ class ModelItem(Resource):
                 paymentplan_months = int(request.json["paymentplan_months"])
             except ValueError:
                 return "Paymentplan price and months must be numbers", 400
+                
+            except KeyError:
+                return "Missing fields", 400
+                
             plan = Paymentplan.query.filter_by(owner_name=handle).filter_by(provider=paymentplan_provider).filter_by(
             price=paymentplan_price).filter_by(months=paymentplan_months).first()
             

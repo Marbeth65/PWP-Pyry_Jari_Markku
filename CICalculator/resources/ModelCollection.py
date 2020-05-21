@@ -2,16 +2,22 @@ from flask import request
 from flask_restful import Resource
 from CICalculator.models import Paymentplan, Handle, Model
 from CICalculator import db
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy import exc
 from CICalculator.utils.hypermedia import CICalcBuilder
+from sqlite3 import IntegrityError
 
 class ModelCollection(Resource):
+  
+    ''' Serves as a collection of Models known to API '''
+    
     
     def get(self, handle):
         '''
-        listaa kaikki modelit
+        Gets all models associated with the handle. Errors are 404 for no handle found
         '''
         kahva = Handle.query.filter_by(handle=handle).first()
+        if not kahva:
+            return "handle not found", 404
         plans = kahva.models
         list = []
         for x in plans:
@@ -32,7 +38,16 @@ class ModelCollection(Resource):
         return response_body, 200
         
     def post(self, handle):
-        kahva = Handle.query.filter_by(handle=handle).first()
+        ''' Posts a new model to the associated handles model collection. Errors are 415, 404, 400 and 409
+        '''
+        
+        if not request.json:
+            return "Unsupported mediatype", 415
+        
+        kahva = Handle.query.filter_by(handle=handle).first()        
+        if not kahva:
+            return "handle not found", 404
+            
         try:
             item = Model(
             model=request.json["model"],
@@ -49,6 +64,9 @@ class ModelCollection(Resource):
             kahva.models.append(item)
             db.session.commit()
         except IntegrityError:
+            return "Model already exists", 409
+            
+        except Exception as e:
             return "Model already exists", 409
         
         return "Success", 202

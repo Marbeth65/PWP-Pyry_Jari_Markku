@@ -1,6 +1,9 @@
 from flask import url_for
 
-''' Hypermedia controls to "dummyhandle" '''
+''' Hypermedia controls to "dummyhandle". MasonBuilder is taken and modified from 
+
+    https://lovelace.oulu.fi/ohjelmoitava-web/programmable-web-project-spring-2020/implementing-rest-apis-with-flask/#generating-hypermedia
+ '''
 
 class MasonBuilder(dict):
 
@@ -11,6 +14,11 @@ class MasonBuilder(dict):
             
         self["@controls"][control_name] = kwargs
         self["@controls"][control_name]["href"] = href
+        
+        if "@namespaces" not in self:
+            self["@namespaces"] = {                             # This should add namespace automatically
+            "cicalc": "/CICalculator/link-relations/#"           
+            }
         
     
 class PaymentCollectionBuilder(MasonBuilder):

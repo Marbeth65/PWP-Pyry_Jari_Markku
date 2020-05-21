@@ -39,10 +39,35 @@ class PaymentplanItem(Resource):
         plan = Paymentplan.query.filter_by(owner_name=handle).filter_by(provider=provider).filter_by(
         price=price).filter_by(months=months).first()
         if plan:
+            
+            if not request.json:
+                return "Incorrect media type", 415
+            
+            try:
+                new_provider = request.json["new_provider"]
+                new_price = float(request.json["new_price"])
+                new_months = int(request.json["new_months"])
+                new_open = request.json["new_open"]
+                new_payers = int(request.json["new_payers"])
+                
+            except KeyError:
+                return  "Invalid request, missing keys", 400
+            
+            except ValueError:
+                return "Invalid numeric values", 400
+                
             Paymentplan.query.filter_by(owner_name=handle).filter_by(provider=provider).filter_by(
-            price=price).filter_by(months=months).update({"open": not plan.open})
+            price=price).filter_by(months=months).update(
+                {
+                "open": new_open,
+                "price": new_price,
+                "months": new_months,
+                "provider": new_provider,
+                "payers": new_payers
+                }
+            )
             db.session.commit()
-            return "Success", 200
+            return "Success", 204
             
         else:
             return "paymentplan not found", 404

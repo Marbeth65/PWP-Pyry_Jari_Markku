@@ -9,6 +9,8 @@ class OpenPaymentplanCollection(Resource):
         listaa kaikki avoimet paymentplanit yhdelle handlelle
         '''
         kahva = Handle.query.filter_by(handle=handle).first()
+        if not kahva:
+            return "Handle not found", 404
         plans = kahva.paymentplans
         list = []
         for x in plans:

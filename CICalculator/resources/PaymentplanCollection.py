@@ -16,6 +16,9 @@ class PaymentplanCollection(Resource):
         '''
         list = []
         kahva = Handle.query.filter_by(handle=handle).first()
+        if not kahva:
+            return "Handle not found", 404
+            
         plans = kahva.paymentplans
         
         for x in plans:
@@ -68,6 +71,12 @@ class PaymentplanCollection(Resource):
         post a new paymentplan
         '''
         handle = Handle.query.filter_by(handle=handle).first()
+        if not handle:
+            return "No handle found", 404
+            
+        if not request.json:
+            return "Invalid media type", 415
+            
         try:
             item = Paymentplan(
             price = request.json["price"],
@@ -94,6 +103,9 @@ class PaymentplanCollection(Resource):
         deletes the handle
         '''
         item = Handle.query.filter_by(handle=handle).first()
+        if not item:
+            return "Handle not found", 404
+            
         db.session.delete(item)
         db.session.commit()
 
