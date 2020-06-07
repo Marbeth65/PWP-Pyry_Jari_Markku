@@ -229,7 +229,7 @@ class TestModelCollection(object):
         
     def test_post(self, client):
     
-        ''' Tests postint and 404, 400 and 415 errors '''
+        ''' Tests postint and 404, 400 and 415 errors. Error 409 is tested separatetly in the next method '''
         resp = client.post(self.RESOURCE_URL)
         assert resp.status_code == 415
         

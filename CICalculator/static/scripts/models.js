@@ -47,6 +47,8 @@ function getResource(href, renderFunction) {
 function appendModelTable(object){
     
     // this function simply appends data to tables. It is fed in packs of up to 3
+    // input object is the response returned from GET call to Model Collection that has been divided by renderModels function
+    
     let $modelCont1 = $("#models1 > table"); 
     let $modelCont2 = $("#models2 > table");
     let $modelCont3 = $("#models3 > table");
@@ -56,7 +58,7 @@ function appendModelTable(object){
     $modelCont3.empty()
     
     $.each(object[0], function(key, value){
-        if (key == "@controls") {
+        if ((key == "@controls") || (key == "@namespaces")) {
             
         } else {
         let row = "<tr><td>" + key + "</td><td>" + value + "</td></tr>"
@@ -69,7 +71,7 @@ function appendModelTable(object){
     if (object.length > 1) {
     
     $.each(object[1], function(key, value){
-        if (key == "@controls") {
+        if ((key == "@controls") || (key == "@namespaces")) {
             
         } else {
         let row = "<tr><td>" + key + "</td><td>" + value + "</td></tr>"
@@ -82,7 +84,7 @@ function appendModelTable(object){
     if (object.length > 2) {
     
     $.each(object[2], function(key, value){
-        if (key == "@controls") {
+        if ((key == "@controls") || (key == "@namespaces")) {
             
         } else {
         let row = "<tr><td>" + key + "</td><td>" + value + "</td></tr>"
@@ -98,6 +100,7 @@ function renderModels(data){
     let plan;
     
     // this function feeds paymentplans to appendModelTable
+    // data input is part of the response from Model Collection that has been divided into smaller packages
     
     for (i = 0; i < modelIndex; i++) { // Datan esikäsittely
         data["items"].shift();
@@ -117,6 +120,9 @@ function renderModels(data){
 }
 
 function renderModelItem1(data) {
+    // This function projects individual plan to Model item box.
+    // Parameter data is response from GET request to Model Item
+    
     
     let $modelItemTable = $("#modelItem > table");
     $modelItemTable.empty();

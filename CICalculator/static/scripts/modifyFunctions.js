@@ -22,7 +22,10 @@ function connectModel(){
         data: JSON.stringify(paymentplanObj),
         contentType: "application/json",
         success: function(){
-        console.log("success");
+                let $paymentInfo = $("#paymentPlanInfo");
+                
+                $paymentInfo.empty();
+                $paymentInfo.append("<p>Connected</p>");
         },
         error: renderError
     }

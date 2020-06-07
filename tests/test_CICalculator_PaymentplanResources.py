@@ -163,11 +163,14 @@ class TestPaymentplanCollection(object):
         resp = client.get(self.RESOURCE_URL)
         assert resp.status_code == 404                      # Tests that resource vanishes
         
-        resp = client.delete(self.WRONG_RESOURCE_URL)
+        resp = client.delete(self.WRONG_RESOURCE_URL)       # Tests that trying to delete wrong url isnt working
         assert resp.status_code == 404
         
         
     def test_put(self, client):
+    
+        ''' Tests that you can edit handle and wrong request results to 400 error '''
+        
         valid = {"type": "petteri", "name": "jorma"}
         resp = client.put(self.RESOURCE_URL, json=valid)
         assert resp.status_code == 200

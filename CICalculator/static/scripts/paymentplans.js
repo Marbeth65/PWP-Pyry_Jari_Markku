@@ -87,7 +87,7 @@ function appendTable(object){
     $AllCont3.empty()
     
     $.each(object[0], function(key, value){
-        if (key == "@controls") {
+        if ((key == "@controls") || (key == "@namespaces")) {
 
         } else {
         let row = "<tr><td>" + key + "</td><td>" + value + "</td></tr>"
@@ -100,7 +100,7 @@ function appendTable(object){
     if (object.length > 1) {
     
     $.each(object[1], function(key, value){
-        if (key == "@controls") {
+        if ((key == "@controls") || (key == "@namespaces")) {
             
         } else {
         let row = "<tr><td>" + key + "</td><td>" + value + "</td></tr>"     // apend table. It appears to be missing ; but I dont want to touch it since it works
@@ -114,7 +114,7 @@ function appendTable(object){
     if (object.length > 2) {
     
     $.each(object[2], function(key, value){
-        if (key == "@controls") {
+        if ((key == "@controls") || (key == "@namespaces")) {
             
         } else {
         let row = "<tr><td>" + key + "</td><td>" + value + "</td></tr>"
@@ -127,6 +127,9 @@ function appendTable(object){
 };
 
 function getResource(href, renderFunction) {
+    // This has been taken from lovelace and modified slightly.
+    // I left out the error part.
+    
     $.ajax({
         url: href,
         success: renderFunction

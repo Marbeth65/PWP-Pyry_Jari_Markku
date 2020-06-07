@@ -7,6 +7,9 @@ from flask import url_for
 
 class MasonBuilder(dict):
 
+    ''' base of all of my hypermedia. taken and slightly modified from lovelace '''
+    
+    
     def add_control(self, control_name, href, **kwargs):
     
         if "@controls" not in self:
