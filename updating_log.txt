@@ -1,0 +1,91 @@
+This textfile contains information about changes to our wiki and code alike. Changes are listed under headlines that are used in this courses scoring sheet.
+
+Deadline 1, "At least two more examples of clients are provided".
+
+Added two more examples of use for our client. Assumed increase in points: 0.5
+
+
+Deadline 1 headlines "An example of a client that uses this API is provided" and "An additional API is provided"
+
+Added Imgur api as an additional example and described briefly what that client does. Also explained briefly how we are going to use
+that API in our own project. Assumed increase in points: 1 (2x 0.5).
+
+Deadline 1 "Relations among concepts is clear" and "A diagram that shows relations between concepts is provided"
+
+Added a diagram that includes structure of our database models. Should give 1 point (2x 0.5)
+
+Deadline 1 assumed increase is 2.5
+
+Deadline 2 headlines "Each model and its attributes...", "Details for arrtributes..." and "Foreign keys follow..." and 
+"Table in the previous section..."
+
+Added table of each model and its attributes. Table covers all models and theyr attributes. Assumed increase 2.25 (0.5, 0.5, 0.75, 0.5)
+
+Deadline 2 headline "Methods in the test are correctly..."
+
+Commented tests extensively. Assumed increase 0.5
+
+Deadline 2 assumed increase 2.75
+
+Deadline 3 header "Api uses correctly the uniform interface."
+
+Modified PUT request so that it now requires body. Assumed increase 0.5
+
+Deadline 3 header "Resouece table with URLs..."
+
+Added resource table. Assumed increase 0.5
+
+Deadline 3 header "Each request has correct media type"
+
+Added media types to all of the requests with body. Assumed increase 0.5
+
+Deadline 3 assumed increase 1.5
+
+Deadline 4 header "The table clearly shows..."
+
+Added table. Assumed increase 0.5
+
+Deadline 4 header "instructions to set up API and run..."
+
+Added some additional information about setting up our api and running our client and running our tests. Assumed increase 0.5, from 0.5 to 1
+
+NOTE! This seems to be a duplicate bullet since deadline 5 has identical header. I am going to go ahead and assume that it will also
+add 0.5 points as promised in grading sheet. So total is 1 point.
+
+Deadline 4 header "You have clearly marked which parts..."
+
+Added documentation to my hypermedia that links to lovelace section from which I took core of my modified function. Hypermedia.py in utils directory.
+Also added comment to my getResource function in paymentplans.js to tell that that function has been taken from lovelace. Paymentplans.js in static, line 130.
+Assumed increase 0.5.
+
+Deadline 4 "Each methods functionality is described in its documentation"
+
+Added documentational descriptions to all the resources. Assumed increase 1.
+
+Deadline 4 "Test cases cover all predictable error scenarios"
+
+Added various new tests that cover 400, 404, 409 and 415 errors. Assumed increase 2 (from 1 to 3)
+
+Deadline 4 assumed increase 4
+
+Deadline 5 header "Workflow diagram available..."
+
+Added workflow diagram consisting of 4 screenshots that were edited. Assumed increase 1 points
+
+Deadline 5 header "Instructions to set up..."
+
+This is duplicate header and was already fixed in deadline 4. So I assume it increases my points with 0.5
+
+Deadline 5 "The client uses different api in addition..."
+
+Created a gallery page to my api that uses Imgur API. Small video to demostrate how it works is linked below. Assumed increase 1.5
+
+https://www.youtube.com/watch?v=F1VNk56tG3M&t=3s
+
+Deadline 5 assumed increase is 3 (1 + 0.5 + 1.5)
+
+
+Assumed increases per deadline: 2.5, 2.75, 1.5, 4, 3
+Total increase: 13.75
+Assumed total points: 85.5
+

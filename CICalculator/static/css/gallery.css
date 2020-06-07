@@ -1,0 +1,23 @@
+h1 {
+    color: red;
+    text-align: center;
+}
+body {
+    background-color: #354649;
+}
+
+.contents {
+    width: 1200px;
+    margin: auto;
+    background-color: #E0E7E9;
+}
+
+img {
+    display: block;
+    margin: auto;
+    max-width: 1000px;
+    border: 1px solid #6C7A89;
+    height: auto;
+    margin-bottom: 40px;
+    margin-top: 40px;
+}
