@@ -12,7 +12,7 @@ class PaymentplanCollection(Resource):
     
     def get(self, handle):
         '''
-        lists all paymentplans
+        lists all paymentplans known to handle
         '''
         list = []
         kahva = Handle.query.filter_by(handle=handle).first()
@@ -68,7 +68,7 @@ class PaymentplanCollection(Resource):
         
     def post(self, handle):
         '''
-        post a new paymentplan
+        post a new paymentplan to the collection
         '''
         handle = Handle.query.filter_by(handle=handle).first()
         if not handle:

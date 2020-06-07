@@ -7,6 +7,9 @@ from CICalculator.utils.hypermedia import CICalcBuilder
 class PaymentplanItem(Resource):
     
     def get(self, handle, provider, price, months):
+    
+        ''' Gets individual paymentplan for inspection and editing '''
+        
         plan = Paymentplan.query.filter_by(owner_name=handle).filter_by(provider=provider).filter_by(
         price=price).filter_by(months=months).first()
         if plan:
@@ -36,6 +39,8 @@ class PaymentplanItem(Resource):
             return "No paymentplan found", 404
             
     def put(self, handle, provider, price, months):
+        ''' Modifies paymentplan'''
+        
         plan = Paymentplan.query.filter_by(owner_name=handle).filter_by(provider=provider).filter_by(
         price=price).filter_by(months=months).first()
         if plan:
@@ -73,6 +78,8 @@ class PaymentplanItem(Resource):
             return "paymentplan not found", 404
             
     def delete(self, handle, provider, price, months):
+    
+        ''' Deletes paymentplan '''
         plan = Paymentplan.query.filter_by(owner_name=handle).filter_by(provider=provider).filter_by(
         price=price).filter_by(months=months).first()
         if plan:

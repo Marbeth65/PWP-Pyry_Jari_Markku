@@ -34,9 +34,9 @@ def create_app(test_config=None):
     from . import api
     app.register_blueprint(api.api_bp)
     
-    @app.route("/admin/")
+    @app.route("/gallery")
     def admin_site():
-        return app.send_static_file("html/admin.html")
+        return app.send_static_file("html/gallery.html")
         
     @app.route("/main/")
     def main_site():

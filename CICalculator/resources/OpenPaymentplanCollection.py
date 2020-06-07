@@ -6,7 +6,7 @@ class OpenPaymentplanCollection(Resource):
     
     def get(self, handle):
         '''
-        listaa kaikki avoimet paymentplanit yhdelle handlelle
+        lists all paymentplans that are still open
         '''
         kahva = Handle.query.filter_by(handle=handle).first()
         if not kahva:

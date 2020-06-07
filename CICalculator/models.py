@@ -2,6 +2,8 @@ from CICalculator import db
 import random
     
 class Handle(db.Model):
+    ''' This model serves as a grouping tool for paymentplans and models '''
+    
     id = db.Column(db.Integer, primary_key=True)
     handle = db.Column(db.String(64), nullable=False, unique=True)              # Esim. Pyrynhandle
     name = db.Column(db.String(64), nullable=False)                             # Henkilön tai yrityksen nimi, jolle tämä handle on tehty. Esim. Pyryn Kilpa-Auto (kuvitteellinen autokauppa)
@@ -12,6 +14,7 @@ class Handle(db.Model):
    
 class Paymentplan(db.Model):
 
+    ''' Serves as a container of payment related information '''
     __table_args__ = (db.UniqueConstraint("price", "provider", "months", name="paymentplan_unique"), )
     
     id = db.Column(db.Integer, primary_key=True)
@@ -31,6 +34,8 @@ class Paymentplan(db.Model):
     model = db.relationship("Model", back_populates="paymentplans", uselist=False)
     
 class Model(db.Model):
+    
+    ''' Serves as container of model related information '''
     
     __table_args__ = (db.UniqueConstraint("manufacturer", "model", "year", name="model_unique"), )
 
@@ -84,6 +89,10 @@ def populate_plans_command(lkm):                        # pragma: no cover
 @click.command("testgen")
 @with_appcontext
 def generate_dummy():
+
+    ''' Main function to populate db for test data ''' 
+    
+    
     item = Handle(
     handle="dummyhandle",
     name="dummyname",
