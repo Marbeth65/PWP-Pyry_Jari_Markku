@@ -1,0 +1,17 @@
+INFORMATION CONCERNING MOBILE CLIENT
+
+Folder named "Mobile" contains a Java client that is designed to run on android. It has been optimised for
+nexus 10 device that can be found from Android Studio application. When this client is ran it will automatically load
+all paymentplans contained in "dummyhandle" -handle and list them using list adapter. To the left in each view of listview can 
+be seen provider of the current paymentplan and other values can be seen to the right.
+
+In order to test that mobile client you need to
+
+1) Get your application to run in port 0.0.0.0 by initiating flask command "flask run -h 0.0.0.0" in terminal after setting FLASK_APP to
+CICalculator
+
+2) Populate the database with either dummydata or normal data. This can be done with flask testgen -function that generates 15 dummy paymentplans.
+If you want to generate your own data, you will have to name your handle "dummyhandle". All paymentplans committed to this handle should be now obtainable
+by client. Remember to select Nexus 10 as the active device from android studio emulators since client has been optimised for that screen size.
+
+
